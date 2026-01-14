@@ -5,8 +5,6 @@ Expone una API REST que permite listar productos, agregar productos a un carrito
 
 El carrito se maneja **en memoria**, identificado por un `sessionId`, con fines educativos y de demostración.
 
----
-
 ## Tecnologías utilizadas
 
 - Java 25
@@ -15,8 +13,6 @@ El carrito se maneja **en memoria**, identificado por un `sessionId`, con fines 
 - Jakarta Validation
 - Springdoc OpenAPI (Swagger UI)
 - Maven
-
----
 
 ## Arquitectura
 
@@ -57,16 +53,8 @@ Toda la lógica del carrito se encuentra en la capa de servicio.
 
 ### Carrito
 
-- `POST /api/cart/items`  
-  Agrega un producto al carrito.
-
-  **Body:**
-  ```json
-  {
-    "sessionId": "string",
-    "productId": 1,
-    "quantity": 1
-  }
+`POST /api/cart/items`  
+Agrega un producto al carrito.
 
 `GET /api/cart/{sessionId}`
 Devuelve los productos del carrito asociados a la sesión.
