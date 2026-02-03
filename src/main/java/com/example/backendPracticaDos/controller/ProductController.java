@@ -16,7 +16,7 @@ import com.example.backendPracticaDos.service.ProductService;
 public class ProductController {
 	private final ProductService productService;
 
-    // Inyección por constructor (BUENA PRÁCTICA)
+    // Inyección por constructor
     public ProductController(ProductService productService) {
         this.productService = productService;
     }

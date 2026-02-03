@@ -42,6 +42,7 @@ public class CartService {
         for (CartItem item : cart) {
             if (item.getProduct().getId().equals(productId)) {
                 item.setQuantity(item.getQuantity() + quantity);
+                //item.setQuantity(quantity);
                 return;
             }
         }

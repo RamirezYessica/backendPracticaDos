@@ -7,10 +7,9 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.backendPracticaDos.dto.AddToCartRequest;
 import com.example.backendPracticaDos.dto.CartItemResponse;
-import com.example.backendPracticaDos.model.CartItem;
-import com.example.backendPracticaDos.model.Product;
+
 import com.example.backendPracticaDos.service.CartService;
-import com.example.backendPracticaDos.service.ProductService;
+
 
 import jakarta.validation.Valid;
 
@@ -32,7 +31,8 @@ public class CartController {
 
         cartService.addItem(
                 request.getSessionId(),
-                request.getProductId(),   // ✅ ahora solo el ID
+                request.getProductId(),   // ahora solo el ID
+                //request.getProductId() + 1,
                 request.getQuantity()
         );
 
