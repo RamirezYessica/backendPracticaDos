@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import com.example.backendPracticaDos.dto.CartItemResponse;
@@ -29,15 +30,13 @@ public class CartService {
     ========================== */
     public void addProductToCart(String sessionId, Long productId, int quantity) {
 
-        Product product = productService.getProductById(productId);
+        Product product = getValidatedProduct(productId);
+        List<CartItem> cart = getOrCreateCart(sessionId);
+        addOrUpdateCartItem(productId, quantity, cart, product);
+    }
 
-        if (product == null) {
-            throw new RuntimeException("Producto no encontrado");
-        }
-
-        List<CartItem> cart =
-                carts.computeIfAbsent(sessionId, k -> new ArrayList<>());
-
+    /*AGREGAMOS O ACTUALIZAMOS EL CARRITO*/
+    private static void addOrUpdateCartItem(Long productId, int quantity, @NonNull List<CartItem> cart, Product product) {
         // Si el producto ya existe en el carrito, aumentar cantidad
         for (CartItem item : cart) {
             if (item.getProduct().getId().equals(productId)) {
@@ -46,9 +45,27 @@ public class CartService {
                 return;
             }
         }
-
         // Si no existe, agregar nuevo
         cart.add(new CartItem(product, quantity));
+    }
+
+    /*OBTENEMOS O CREAMOS EL CARRITO*/
+    @NonNull
+    private List<CartItem> getOrCreateCart(String sessionId) {
+        List<CartItem> cart =
+                carts.computeIfAbsent(sessionId, k -> new ArrayList<>());
+        return cart;
+    }
+
+    /*VALIDAMOS SI EXISTE EL PRODUCTO*/
+    @NonNull
+    private Product getValidatedProduct(Long productId) {
+        Product product = productService.getProductById(productId);
+
+        if (product == null) {
+            throw new RuntimeException("Producto no encontrado");
+        }
+        return product;
     }
 
     /* =========================
