@@ -1,17 +1,13 @@
 package com.example.backendPracticaDos.service;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
-import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Service;
 
 import com.example.backendPracticaDos.dto.CartItemResponse;
 import com.example.backendPracticaDos.model.CartItem;
 import com.example.backendPracticaDos.model.Product;
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class CartService {
