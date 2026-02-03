@@ -29,7 +29,7 @@ public class CartController {
     public ResponseEntity<Void> addItem(
             @Valid @RequestBody AddToCartRequest request) {
 
-        cartService.addItem(
+        cartService.addProductToCart(
                 request.getSessionId(),
                 request.getProductId(),   // ahora solo el ID
                 //request.getProductId() + 1,

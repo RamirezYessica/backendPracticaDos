@@ -27,7 +27,7 @@ public class CartService {
     /* =========================
        AGREGAR PRODUCTO
     ========================== */
-    public void addItem(String sessionId, Long productId, int quantity) {
+    public void addProductToCart(String sessionId, Long productId, int quantity) {
 
         Product product = productService.getProductById(productId);
 
