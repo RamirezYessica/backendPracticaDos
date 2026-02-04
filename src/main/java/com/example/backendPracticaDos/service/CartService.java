@@ -32,7 +32,7 @@ public class CartService {
     }
 
     /*AGREGAMOS O ACTUALIZAMOS EL CARRITO*/
-    private static void addOrUpdateCartItem(Long productId, int quantity, @NonNull List<CartItem> cart, Product product) {
+    private void addOrUpdateCartItem(Long productId, int quantity, @NonNull List<CartItem> cart, Product product) {
         // Si el producto ya existe en el carrito, aumentar cantidad
         for (CartItem item : cart) {
             if (item.getProduct().getId().equals(productId)) {
@@ -48,9 +48,7 @@ public class CartService {
     /*OBTENEMOS O CREAMOS EL CARRITO*/
     @NonNull
     private List<CartItem> getOrCreateCart(String sessionId) {
-        List<CartItem> cart =
-                carts.computeIfAbsent(sessionId, k -> new ArrayList<>());
-        return cart;
+        return carts.computeIfAbsent(sessionId, k -> new ArrayList<>());
     }
 
     /*VALIDAMOS SI EXISTE EL PRODUCTO*/
