@@ -7,7 +7,6 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class CartService {
@@ -85,7 +84,7 @@ public class CartService {
                     );
                 })
                 .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+                .toList();
     }
     
     /*Quita un solo producto del carrito*/
