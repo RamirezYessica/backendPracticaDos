@@ -21,7 +21,10 @@ public class CartService {
     }
 
     /* =========================
-       AGREGAR PRODUCTO
+       AGREGAR PRODUCTO (addProductToCart): En este método se aplica extract method, ya que el método era
+       demasiado largo, ya que agregaba productos al carrito o actualizaba el carrito, de igual forma obtenía o
+       creaba el carrito y validaba si el carrito existía, por lo que al hacer muchas funciones se recomienda
+       dividirlo en varios métodos, dejando solo el método principal, para llamar a los demás métodos.
     ========================== */
     public void addProductToCart(String sessionId, Long productId, int quantity) {
 
@@ -36,7 +39,6 @@ public class CartService {
         for (CartItem item : cart) {
             if (item.getProduct().getId().equals(productId)) {
                 item.setQuantity(item.getQuantity() + quantity);
-                //item.setQuantity(quantity);
                 return;
             }
         }
@@ -45,6 +47,11 @@ public class CartService {
     }
 
     /*OBTENEMOS O CREAMOS EL CARRITO*/
+    /*En este método aplicamos la sugerencia del IDE, la cual se indica cuando una palabra o palabras
+    *es subrayada en color amarillo, en este ejemplo teníamos
+    * List<cartItem> cart = computeIfAbsent(sessionId, k -> new ArrayList<>()); y es sustituida por:
+    * return carts.computeIfAbsent(sessionId, k -> new ArrayList<>()); */
+
     @NonNull
     private List<CartItem> getOrCreateCart(String sessionId) {
         return carts.computeIfAbsent(sessionId, k -> new ArrayList<>());
