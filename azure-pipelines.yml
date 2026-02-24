@@ -7,16 +7,49 @@ trigger:
 - main
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'ubuntu-latest'
 
-steps:
-- task: Maven@3
-  inputs:
-    mavenPomFile: 'pom.xml'
-    mavenOptions: '-Xmx3072m'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '17'
-    jdkArchitectureOption: 'x64'
-    publishJUnitResults: true
-    testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    goals: 'package'
+variables:
+  javaVersion: '17'
+  artifactName: 'backend-jar'
+
+stages:
+
+- stage: Build
+  displayName: "Build and Test"
+  jobs:
+  - job: BuildBackend
+    displayName: "Compile Application"
+    steps:
+    - task: Maven@3
+      inputs:
+        mavenPomFile: 'pom.xml'
+        javaHomeOption: 'JDKVersion'
+        jdkVersionOption: '$(javaVersion)'
+        jdkArchitectureOption: 'x64'
+        goals: 'clean package'
+        publishJUnitResults: true
+        testResultsFiles: '**/surefire-reports/TEST-*.xml'
+
+- stage: PublishArtifact
+  displayName: "Publish Artifact"
+  dependsOn: Build
+  condition: succeeded()
+  jobs:
+  - job: Publish
+    displayName: "Store JAR"
+    steps:
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: 'target'
+        ArtifactName: '$(artifactName)'
+
+- stage: DeployDev
+  displayName: "Deploy to Dev (Simulated)"
+  dependsOn: PublishArtifact
+  condition: succeeded()
+  jobs:
+  - job: Deploy
+    displayName: "Simulated Deployment"
+    steps:
+    - script: echo "Deploying artifact to Dev environment"
