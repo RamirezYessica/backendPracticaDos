@@ -10,8 +10,13 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  javaVersion: '17'
-  artifactName: 'backend-jar'
+- group: backend-secrets
+
+- name: javaVersion
+  value: '17'
+
+- name: artifactName
+  value: 'backend-jar'
 
 stages:
 
@@ -53,3 +58,6 @@ stages:
     displayName: "Simulated Deployment"
     steps:
     - script: echo "Deploying artifact to Dev environment"
+    
+    - script: echo "Database password is $(DB_PASSWORD)"
+      displayName: "Using secret variable"
