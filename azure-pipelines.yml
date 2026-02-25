@@ -61,3 +61,18 @@ stages:
     
     - script: echo "Database password is $(DB_PASSWORD)"
       displayName: "Using secret variable"
+
+- stage: DeployProd
+  displayName: "Deploy to Production"
+  dependsOn: DeployDev
+  condition: succeeded()
+  jobs:
+  - deployment: DeployProduction
+    displayName: "Production Deployment"
+    environment: Production
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - script: echo "Deploying to Production"
+            displayName: "Production Deploy Step"
