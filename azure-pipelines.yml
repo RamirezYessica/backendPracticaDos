@@ -47,7 +47,7 @@ stages:
     - task: PublishBuildArtifacts@1
       displayName: "Store JAR"
       inputs:
-        PathtoPublish: '$(System.DefaultWorkingDirectory)/**/target'
+        PathtoPublish: '$(Build.SourcesDirectory)/$(Build.Repository.Name)/target'
         ArtifactName: 'app'
         publishLocation: 'Container'
 
