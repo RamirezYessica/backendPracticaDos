@@ -3,6 +3,8 @@
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/java
 
+# Maven
+# Build your Java project and run tests with Apache Maven.
 trigger:
 - main
 
@@ -10,7 +12,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-- group: backend-secrets
+- group: backend-secrets # Tu grupo de variables para la BD
 
 - name: javaVersion
   value: '17'
@@ -27,6 +29,7 @@ stages:
     displayName: "Compile Application"
     steps:
     - task: Maven@3
+      displayName: "Maven Package"
       inputs:
         mavenPomFile: 'pom.xml'
         javaHomeOption: 'JDKVersion'
@@ -36,31 +39,28 @@ stages:
         publishJUnitResults: true
         testResultsFiles: '**/surefire-reports/TEST-*.xml'
 
-- stage: PublishArtifact
-  displayName: "Publish Artifact"
-  dependsOn: Build
-  condition: succeeded()
-  jobs:
-  - job: Publish
-    displayName: "Store Artifact"
-    steps:
-    - task: PublishBuildArtifacts@1
-      displayName: "Store JAR"
+
+    - task: PublishPipelineArtifact@1
+      displayName: "Save JAR Artifact"
       inputs:
-        PathtoPublish: '$(Build.SourcesDirectory)/$(Build.Repository.Name)/target'
-        ArtifactName: 'app'
-        publishLocation: 'Container'
+        targetPath: '$(System.DefaultWorkingDirectory)/target'
+        artifact: '$(artifactName)'
+        publishLocation: 'pipeline'
 
 - stage: DeployDev
   displayName: "Deploy to Dev (Simulated)"
-  dependsOn: PublishArtifact
+  dependsOn: Build
   condition: succeeded()
   jobs:
   - job: Deploy
     displayName: "Simulated Deployment"
     steps:
+    # Paso opcional para descargar el JAR si necesitas procesarlo en el deploy
+    - download: current
+      artifact: '$(artifactName)'
+      displayName: "Download Artifact for Deploy"
+
     - script: echo "Deploying artifact to Dev environment"
-    
     - script: echo "Database password is $(DB_PASSWORD)"
       displayName: "Using secret variable"
 
@@ -76,5 +76,7 @@ stages:
       runOnce:
         deploy:
           steps:
+          - download: current
+            artifact: '$(artifactName)'
           - script: echo "Deploying to Production"
             displayName: "Production Deploy Step"
