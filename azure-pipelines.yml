@@ -42,12 +42,14 @@ stages:
   condition: succeeded()
   jobs:
   - job: Publish
-    displayName: "Store JAR"
+    displayName: "Store Artifact"
     steps:
     - task: PublishBuildArtifacts@1
+      displayName: "Store JAR"
       inputs:
-        PathtoPublish: 'target'
-        ArtifactName: '$(artifactName)'
+        PathtoPublish: '$(Build.SourcesDirectory)/target'
+        ArtifactName: 'app'
+        publishLocation: 'Container'
 
 - stage: DeployDev
   displayName: "Deploy to Dev (Simulated)"
