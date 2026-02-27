@@ -55,11 +55,6 @@ stages:
   - job: Deploy
     displayName: "Simulated Deployment"
     steps:
-    # Paso opcional para descargar el JAR si necesitas procesarlo en el deploy
-    - download: current
-      artifact: '$(artifactName)'
-      displayName: "Download Artifact for Deploy"
-
     - script: echo "Deploying artifact to Dev environment"
     - script: echo "Database password is $(DB_PASSWORD)"
       displayName: "Using secret variable"
